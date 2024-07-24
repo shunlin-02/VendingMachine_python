@@ -23,6 +23,20 @@ class VendingMachine:
                 amount -= note
         return change_notes
 
+    def format_change(self, change_notes):
+        note_count = {}
+        for note in change_notes:
+            if note in note_count:
+                note_count[note] += 1
+            else:
+                note_count[note] = 1
+
+        change_str_list = []
+        for note, count in note_count.items():
+            change_str_list.append(f"${note} x {count}")
+        change_str = ", ".join(change_str_list)
+        return change_str
+
     def purchase_drink(self, drink_choice, payment):
         drink_choice_normalized = drink_choice.lower()
         drinks_normalized = {k.lower(): v for k, v in self.drinks.items()}
@@ -46,7 +60,8 @@ class VendingMachine:
             return f"Here is your {drink_choice}. No change."
         else:
             change_notes = self.get_change(change)
-            return f"Here is your {drink_choice}. Your change is: {', '.join(map(str, change_notes))}"
+            formatted_change = self.format_change(change_notes)
+            return f"Here is your {drink_choice}. Your change is: {formatted_change}"
 
 
 if __name__ == "__main__":
